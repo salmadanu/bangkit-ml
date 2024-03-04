@@ -9,7 +9,7 @@ main_df = pd.read_csv("main_data.csv")
 # Judul page dan penjelasan
 st.subheader('Proyek Akhir Analisis Data :rain_cloud:')
 st.header('AQI Levels in Huairou, Beijing :national_park:')
-st.subheader('This dashboard displays quarterly data of AQI values througout the years 2013-2017')
+st.subheader('This dashboard displays quarterly data of AQI values throughout the years 2013-2017')
 st.write(':one: First, choose the year and quarter of AQI data to be displayed.')
 st.write(':two: Secondly, use the sidebar to choose which AQI values to be displayed.')
 
@@ -195,6 +195,19 @@ quarterly_RAIN_df['quarter'] = quarterly_RAIN_df['quarter'].astype(str)
 
 quarterly_aqi_df = create_quarterly_aqi_df(main_df)
 
+# Untuk menampilkan line chart pertama
+selected_params = [param for param, selected in zip(options, selected_options) if selected]
+selected_params_data = quarterly_aqi_df[['year', 'quarter'] + selected_params]
+grouped_data = selected_params_data.groupby(['year', 'quarter']).mean().reset_index()
+st.subheader('Line chart of selected AQI parameters by quarter (2013-2017)')
+st.text('Data points are based on mean values of selected AQI parameters of each quarter throughout 2013-2017')
+st.write(':grey_question: Empty line chart means no parameters have been chosen')
+st.write('X-Axis : Quarter (2013 Q2 to 2017 Q1)')
+st.write('Y-Axis : Quarterly mean value of selected AQI parameter)')
+st.line_chart(grouped_data[selected_params])
+
+
+st.subheader('Quarterly Statistics')
 # PM2.5 container horizontal
 st.subheader(':microscope: PM2.5')
 mean_PM25, max_PM25, min_PM25 = get_PM25_metrics(quarterly_PM25_df, year_select, quarter_select)
@@ -241,22 +254,15 @@ st.write(selected_quarter_data)
 st.subheader('Line chart of selected AQI parameters during selected quarter')
 st.text('Data points are based on daily means of AQI parameters throughout the chosen quarter')
 st.write(':grey_question: Empty line chart means no parameters have been chosen')
+st.write('X:Axis : Days throughout chosen quarter')
+st.write('Y-Axis : Daily mean value of selected AQI parameter)')
 selected_options_names = [option for option, selected in zip(options, selected_options) if selected]
 selected_quarter_data_selected_options = selected_quarter_data[selected_options_names]
 st.line_chart(selected_quarter_data_selected_options)
 
 # --------------------- MAIN PAGE --------------------- #
 
-# st.write(quarterly_aqi_df)
-# Filter data for selected parameters
-selected_params = [param for param, selected in zip(options, selected_options) if selected]
-selected_params_data = quarterly_aqi_df[['year', 'quarter'] + selected_params]
-# Group the data by year and quarter and calculate mean for each parameter
-grouped_data = selected_params_data.groupby(['year', 'quarter']).mean().reset_index()
-st.subheader('Line chart of selected AQI parameters by quarter (2013-2017)')
-st.text('Data points are based on mean values of selected AQI parameters throughout the chosen quarter')
-st.line_chart(grouped_data[selected_params])
-
+st.caption('Made by Salma Nadhira Danuningrat for Bangkit ML 2024')
 
 
 
