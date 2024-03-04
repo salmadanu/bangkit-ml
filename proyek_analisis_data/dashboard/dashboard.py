@@ -65,7 +65,6 @@ def create_rfm_df(df):
 
 all_df = pd.read_csv("all_data.csv")
 
-# Membuat tampilan dashboard (sidebar)
 datetime_columns = ["order_date", "delivery_date"]
 all_df.sort_values(by="order_date", inplace=True)
 all_df.reset_index(inplace=True)
@@ -76,6 +75,7 @@ for column in datetime_columns:
 min_date = all_df["order_date"].min()
 max_date = all_df["order_date"].max()
  
+# Membuat tampilan dashboard (sidebar)
 with st.sidebar:
     # Menambahkan logo perusahaan
     st.image("https://github.com/dicodingacademy/assets/raw/main/logo.png")
@@ -89,6 +89,7 @@ with st.sidebar:
 
 main_df = all_df[(all_df["order_date"] >= str(start_date)) & 
                 (all_df["order_date"] <= str(end_date))]
+st.write(main_df)
 
 # Pemanggilan helper function yang sudah dibuat di atas
 daily_orders_df = create_daily_orders_df(main_df)
